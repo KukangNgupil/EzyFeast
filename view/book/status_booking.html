@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Booking</title>
+    <link rel="stylesheet" href="../../css/status_booking.css">
+</head>
+<body>
+    <header class="header">
+        <h1>Status Booking</h1>
+        <div class="user-details">
+            <img src="../../assets/images/profil_akun.png" alt="User Profile Picture" class="profile-pic" id="user-avatar">
+            <div class="user-info">
+                <div class="user-name" id="user-name"></div>
+                <div class="user-email" id="user-email"></div>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="content">
+            <div class="form-data">
+                <h2>Data Booking</h2>
+                <p><strong>Nama:</strong> <span id="nama"></span></p>
+                <p><strong>Tanggal:</strong> <span id="tanggal"></span></p>
+                <p><strong>Waktu:</strong> <span id="waktu"></span></p>
+                <p><strong>Acara:</strong> <span id="acara"></span></p>
+                <p><strong>Jumlah Orang:</strong> <span id="jumlah-orang"></span></p>
+                <p><strong>Pengajuan:</strong> <span id="pengajuan"></span></p>
+                <p><strong>Konfirmasi:</strong> <span id="konfirmasi"></span></p>
+            </div>
+            <div class="restaurant-data">
+                <h2>Data Restoran</h2>
+                <img id="restaurant-image" src="" alt="Restoran Image" class="restaurant-image">
+                <p><strong>Nama Restoran:</strong> <span id="restaurant-name"></span></p>
+                <p><strong>Deskripsi:</strong> <span id="restaurant-desc"></span></p>
+                <p><strong>Rating:</strong> <span id="restaurant-rate"></span></p>
+            </div>
+        </div>
+        <div class="confirmation-instructions">
+            <p>Screenshot halaman ini dan konfirmasi melalui WA</p>
+            <button id="whatsapp-confirmation">Konfirmasi melalui WA</button>
+        </div>
+        <div class="back-button">
+            <button id="back">Kembali</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userInfo = JSON.parse(localStorage.getItem("user"));
+
+            if (userInfo) {
+                document.getElementById("user-name").textContent = userInfo.username;
+                document.getElementById("user-email").textContent = userInfo.email;
+                document.getElementById("user-avatar").src = userInfo.avatar;
+            }
+
+            const bookingData = JSON.parse(localStorage.getItem('bookingData'));
+
+            if (bookingData) {
+                document.getElementById('nama').textContent = bookingData.nama;
+                document.getElementById('tanggal').textContent = bookingData.tanggal;
+                document.getElementById('waktu').textContent = bookingData.waktu;
+                document.getElementById('acara').textContent = bookingData.acara;
+                document.getElementById('jumlah-orang').textContent = bookingData.jumlahOrang;
+                document.getElementById('pengajuan').textContent = bookingData.pengajuan ? "Ya" : "Tidak";
+                document.getElementById('konfirmasi').textContent = bookingData.konfirmasi ? "Ya" : "Tidak";
+
+                document.getElementById('restaurant-image').src = bookingData.pict;
+                document.getElementById('restaurant-name').textContent = bookingData.name;
+                document.getElementById('restaurant-desc').textContent = bookingData.desc;
+                document.getElementById('restaurant-rate').textContent = bookingData.rate;
+
+                // Save restaurant data to localStorage
+                localStorage.setItem('restaurantData', JSON.stringify({
+                    pict: bookingData.pict,
+                    name: bookingData.name,
+                    desc: bookingData.desc,
+                    rate: bookingData.rate
+                }));
+            }
+        });
+
+        document.getElementById('back').addEventListener('click', function() {
+            window.location.href = 'booking.html';
+        });
+
+        document.getElementById('whatsapp-confirmation').addEventListener('click', function() {
+            const userInfo = JSON.parse(localStorage.getItem("user"));
+            const username = userInfo ? userInfo.username : 'Saya';
+            const waNumber = '6285218300253'; // WhatsApp number in international format
+            const message = `Halo EzyMin, ${username} mau reservasi nih`;
+            const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+            window.open(waLink, '_blank');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Sekarang</title>
+    <link rel="stylesheet" href="../../css/bookingsekarang.css">
+</head>
+<body>
+    <div class="header">
+        <div class="info-pengguna">
+            <img src="../../assets/images/profil_akun.png" alt="Foto Pengguna" class="foto-pengguna" id="user-avatar">
+            <div class="detail-pengguna">
+                <div class="nama-pengguna" id="user-name"></div>
+                <div class="username-pengguna" id="user-email"></div>
+            </div>
+        </div>
+    </div>
+    <div class="kontainer">
+        <main class="form-kontainer">
+            <form id="booking-form">
+                <div class="form-group">
+                    <label for="nama">Nama:</label>
+                    <input type="text" id="nama" name="nama" required>
+                </div>
+                <div class="form-group">
+                    <label for="tanggal">Tanggal:</label>
+                    <input type="date" id="tanggal" name="tanggal" required>
+                </div>
+                <div class="form-group">
+                    <label for="waktu">Waktu:</label>
+                    <input type="time" id="waktu" name="waktu" required>
+                </div>
+                <div class="form-group">
+                    <label for="acara">Acara:</label>
+                    <input type="text" id="acara" name="acara" required>
+                </div>
+                <div class="form-group">
+                    <label for="jumlah-orang">Jumlah Orang:</label>
+                    <input type="number" id="jumlah-orang" name="jumlah-orang" required>
+                </div>
+                <div class="form-group">
+                    <label for="pengajuan">Pengajuan:</label>
+                    <input type="checkbox" id="pengajuan" name="pengajuan">
+                </div>
+                <div class="form-group">
+                    <label for="konfirmasi">Konfirmasi:</label>
+                    <input type="checkbox" id="konfirmasi" name="konfirmasi">
+                </div>
+                <button type="submit">Submit</button>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const userInfo = JSON.parse(localStorage.getItem("user"));
+
+            if (userInfo) {
+                document.getElementById("user-name").textContent = userInfo.username;
+                document.getElementById("user-email").textContent = userInfo.email;
+                document.getElementById("user-avatar").src = userInfo.avatar;
+            }
+        });
+
+        document.getElementById('booking-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const formData = {
+                nama: document.getElementById('nama').value,
+                tanggal: document.getElementById('tanggal').value,
+                waktu: document.getElementById('waktu').value,
+                acara: document.getElementById('acara').value,
+                jumlahOrang: document.getElementById('jumlah-orang').value,
+                pengajuan: document.getElementById('pengajuan').checked,
+                konfirmasi: document.getElementById('konfirmasi').checked
+            };
+
+            const bookingData = JSON.parse(localStorage.getItem('bookingData')) || {};
+            const combinedData = { ...bookingData, ...formData };
+
+            localStorage.setItem('bookingData', JSON.stringify(combinedData));
+            window.location.href = 'status_booking.html';
+        });
+    </script>
+</body>
+</html>
